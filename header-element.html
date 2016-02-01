@@ -1,12 +1,12 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
-
-
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
 
 <dom-module id="header-element">
 
     <template>
         <style>
-            paper-toolbar{
+            .top-bar, .top-bar ul {
                 background-color: #0079af;
                 color: #FFFFFF;
             }
@@ -14,17 +14,20 @@
             paper-dropdown-menu.operator {
                 --paper-input-container-label: {
                     color: grey;
-
+                    margin-top: 8px;
                     font-style: italic;
                 };
                 --paper-input-container-underline: {
                     display: none;
                 };
-                --paper-dropdown-menu-input:{
+                --paper-input-container: {
+                    margin-top: -15px;
+                };
+                --paper-dropdown-menu-input: {
                     background-color: #FFFFFF;
                     padding-left: 10px;
                     margin: 5px;
-                    width: 120px;
+                    width: 150px;
                 };
             }
         </style>
@@ -35,18 +38,29 @@
                 last-response="{{data}}"
                 handle-as="json"
                 on-response="handleResponse"></iron-ajax>
-        <paper-toolbar>
-            <paper-icon-button icon="menu"></paper-icon-button>
-            <div class="title">Ticket Office</div>
-            <iron-icon icon="face"></iron-icon>
-            <paper-dropdown-menu class="operator" label="Operator" no-label-float>
-                <paper-listbox class="dropdown-content">
-                    <template is="dom-repeat" items="{{users}}">
-                        <paper-item on-click="selectOperator">{{item.name}}</paper-item>
-                    </template>
-                </paper-listbox>
-            </paper-dropdown-menu>
-        </paper-toolbar>
+        <header>
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <h5 class="menu-text">Ticket Office</h5>
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
+                        <li>
+                            <iron-icon icon="face"></iron-icon>
+                        </li>
+                        <li>
+                            <paper-dropdown-menu class="operator" label="Operator" no-label-float>
+                                <paper-listbox class="dropdown-content">
+                                    <template is="dom-repeat" items="{{users}}">
+                                        <paper-item on-click="selectOperator">{{item.name}}</paper-item>
+                                    </template>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
     </template>
 
     <script>
@@ -55,7 +69,7 @@
             ready: function () {
                 this.users = []
             },
-            handleResponse: function(e, request){
+            handleResponse: function (e, request) {
                 this.users = request.xhr.response;
             },
             selectOperator: function (e) {

@@ -1,18 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--<meta charset="UTF-8">-->
-<!--<title>Polymer Ticket Office</title>-->
-<!--<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
-<!--<link rel="import" href="header-element.html">-->
-
-
-<!--</head>-->
-<!--<body>-->
-<!--<header-element></header-element>-->
-<!--</body>-->
-<!--</html>-->
-
 <html>
 <head>
     <meta charset="utf-8">
@@ -20,10 +5,12 @@
 
     <title>Polymer Ticket-Office</title>
 
+    <link rel="stylesheet" href="bower_components/foundation-sites/dist/foundation.css" />
+
+
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
-    <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-    <link rel="import" href="bower_components/paper-item/paper-item.html">
+
+
     <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
     <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
     <link rel="import" href="bower_components/iron-signals/iron-signals.html">
@@ -32,6 +19,7 @@
     <link rel="import" href="header-element.html">
     <link rel="import" href="list_ticket-element.html">
     <link rel="import" href="cart-element.html">
+
     <style>
         list_ticket-element{
             height: 10px;
@@ -52,5 +40,11 @@
 <list_ticket-element></list_ticket-element>
 <cart-element></cart-element>
 
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/what-input/what-input.min.js"></script>
+<script src="bower_components/foundation-sites/dist/foundation.min.js"></script>
+<script>
+    $(document).foundation();
+</script>
 </body>
 </html>
