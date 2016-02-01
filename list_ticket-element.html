@@ -6,7 +6,8 @@
         <style is="custom-style">
             paper-card.rate {
                 @apply(--layout-flex);
-                margin: 5px -5PX 5PX -5PX;
+                margin: 5px -10PX 5PX -10PX;
+                width: 100%;
             }
         </style>
         <iron-ajax
@@ -16,32 +17,34 @@
                 handle-as="json"
                 on-response="handleResponse"></iron-ajax>
         <iron-signals on-iron-signal-current-operator="currentOperator"></iron-signals>
-        <template is="dom-repeat" items="{{prices}}">
-            <div class="small-12 medium-6 large-4 columns">
-                <paper-card class="rate">
-                    <div class="top-bar">
-                        <div class="top-bar-left">
-                            <div class="rate-header">
-                                <iron-icon icon="{{item.icon}}"></iron-icon>
-                                {{item.title}}
+        <div class="row">
+            <template is="dom-repeat" items="{{prices}}">
+                <div class="small-12 medium-6 large-4 columns">
+                    <paper-card class="rate">
+                        <div class="top-bar">
+                            <div class="top-bar-left">
+                                <div class="rate-header">
+                                    <iron-icon icon="{{item.icon}}"></iron-icon>
+                                    {{item.title}}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="rate-content">
-                        <div class="card-content">
-                            <div class="rate-name">{{item.price}} €</div>
-                            <div>{{item.definition}}</div>
+                        <div class="rate-content">
+                            <div class="card-content">
+                                <div class="rate-name">{{item.price}} €</div>
+                                <div>{{item.definition}}</div>
+                            </div>
+                            <div class="card-actions">
+                                <paper-button on-click="more">
+                                    <iron-icon icon="add-shopping-cart"></iron-icon>
+                                    Ajouter
+                                </paper-button>
+                            </div>
                         </div>
-                        <div class="card-actions">
-                            <paper-button on-click="more" noink raised>
-                                <iron-icon icon="add-shopping-cart"></iron-icon>
-                                Ajouter
-                            </paper-button>
-                        </div>
-                    </div>
-                </paper-card>
-            </div>
-        </template>
+                    </paper-card>
+                </div>
+            </template>
+        </div>
     </template>
     <script>
         Polymer({
