@@ -1,0 +1,70 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-card/paper-card.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<dom-module id="list_ticket-element">
+    <template>
+        <style is="custom-style">
+            paper-card.rate {
+                @apply(--layout-flex);
+                float: left;
+                margin: 10px;
+                width: 45%;
+            }
+            .rate-content {
+                @apply(--layout-flex);
+                float: left;
+            }
+            .rate-header { @apply(--paper-font-headline); }
+            .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
+            paper-icon-button.rate-icon {
+                --iron-icon-fill-color: white;
+                --iron-icon-stroke-color: var(--paper-grey-600);
+            }
+        </style>
+        <div class="horizontal-section-container">
+            <iron-ajax
+                    id="ajaxPost"
+                    url="data/prices.json"
+                    last-response="{{prices}}"
+                    handle-as="json"
+                    on-response="handleResponse"></iron-ajax>
+            <iron-signals on-iron-signal-current-operator="currentOperator"></iron-signals>
+
+            <template is="dom-repeat" items="{{prices}}">
+                <paper-card class="rate">
+                    <div class="rate-content">
+                        <div class="card-content">
+                            <div class="rate-header"><iron-icon icon="{{item.icon}}"></iron-icon> {{item.title}}</div>
+                            <div class="rate-name">{{item.price}} €</div>
+                            <div>{{item.definition}}</div>
+                        </div>
+                        <div class="card-actions">
+                            <paper-button on-click="more"><iron-icon icon="add-shopping-cart"></iron-icon> Ajouter</paper-button>
+                        </div>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'list_ticket-element',
+            ready: function () {
+                this.prices = []
+            },
+            handleResponse: function (e, request) {
+                this.prices = request.xhr.response;
+            },
+            listeners: {
+                'currentOperator': 'currentOperator'
+            },
+            currentOperator: function (e, detail, sender) {
+                this.$.ajaxPost.generateRequest();
+            },
+            more: function (e) {
+                var model = e.model;
+                this.fire('iron-signal', {name: "add-order", data: model.item});
+            }
+        });
+    </script>
+</dom-module>

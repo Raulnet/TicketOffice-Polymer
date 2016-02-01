@@ -1,0 +1,121 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+
+<dom-module id="cart-element">
+    <style is="custom-style">
+        paper-header-panel {
+            float: left;
+            width: 100%;
+            @apply(--shadow-elevation-2dp);
+        }
+
+        .paper-header {
+            height: 60px;
+            font-size: 16px;
+            line-height: 60px;
+            padding: 0 10px;
+            color: white;
+            transition: height 0.2s;
+        }
+
+        .blue .paper-header {
+            background-color: var(--paper-light-blue-500);
+        }
+
+        .orderTicket {
+            margin: 5px 0px 5px 0px;
+        }
+    </style>
+    <template>
+        <paper-header-panel class="blue">
+            <div class="paper-header">
+                <iron-icon icon="shopping-cart"></iron-icon>
+                Cart {{sumOrder}} €
+            </div>
+            <div class="content">
+                <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
+
+                <template is="dom-repeat" items="{{orders}}">
+                    <paper-material class="orderTicket" elevation="3">
+                        <paper-item>
+                            <iron-icon icon="{{item.icon}}"></iron-icon>
+                            <paper-item-body two-line>
+                                <div>{{item.title}}</div>
+                                <div secondary>{{item.price}} €</div>
+                            </paper-item-body>
+                            <iron-icon icon="close"></iron-icon>
+                            <paper-item-body>
+                                <div>{{item.ordered}}</div>
+                            </paper-item-body>
+                            <paper-item-body>
+                                <div>{{item.priceTotal}} €</div>
+                            </paper-item-body>
+                            <paper-item-body>
+                                <paper-button>
+                                    <iron-icon on-click="add" icon="add"></iron-icon>
+                                </paper-button>
+                                <paper-button>
+                                    <iron-icon on-click="remove" icon="remove"></iron-icon>
+                                </paper-button>
+                            </paper-item-body>
+                        </paper-item>
+                    </paper-material>
+                </template>
+            </div>
+        </paper-header-panel>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'cart-element',
+            ready: function () {
+                this.sumOrder = '0',
+                        this.orders = []
+            },
+            listeners: {
+                'addOrder': 'addOrder'
+            },
+            addOrder: function (e, detail) {
+
+                var order = detail;
+                var indexOf = this.orders.indexOf(order);
+
+                if (indexOf < 0) {
+                    order.ordered = 1;
+                    order.priceTotal = parseFloat(order.price);
+                    this.push('orders', order);
+                    this.sumOrder = parseFloat(this.sumOrder) + parseFloat(order.price);
+                } else {
+                    var item = this.orders[indexOf];
+                    this.set('orders.' + indexOf + '.ordered', item.ordered + 1);
+                    this.set('orders.' + indexOf + '.priceTotal', item.priceTotal + parseFloat(item.price));
+                    this.sumOrder = parseFloat(this.sumOrder) + parseFloat(item.price);
+                }
+            },
+            add: function (e) {
+                var model = e.model;
+                var indexOf = this.orders.indexOf(model.item);
+                var item = this.orders[indexOf];
+                this.set('orders.' + indexOf + '.ordered', item.ordered + 1);
+                this.set('orders.' + indexOf + '.priceTotal', item.priceTotal + parseFloat(item.price));
+                this.sumOrder = parseFloat(this.sumOrder) + parseFloat(item.price);
+
+            },
+            remove: function (e) {
+                var model = e.model;
+                model.set('item.ordered', model.item.ordered - 1);
+                model.set('item.priceTotal', model.item.priceTotal - parseFloat(model.item.price));
+                this.sumOrder = parseFloat(this.sumOrder) - parseFloat(model.item.price);
+
+                if (model.item.ordered == 0) {
+                    var indexOf = this.orders.indexOf(model.item);
+                    this.splice('orders', indexOf, 1);
+                }
+            }
+        });
+    </script>
+</dom-module>

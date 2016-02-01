@@ -1,0 +1,68 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+
+
+<dom-module id="header-element">
+
+    <template>
+        <style>
+            paper-toolbar{
+                background-color: #0079af;
+                color: #FFFFFF;
+            }
+
+            paper-dropdown-menu.operator {
+                --paper-input-container-label: {
+                    color: grey;
+
+                    font-style: italic;
+                };
+                --paper-input-container-underline: {
+                    display: none;
+                };
+                --paper-dropdown-menu-input:{
+                    background-color: #FFFFFF;
+                    padding-left: 10px;
+                    margin: 5px;
+                    width: 120px;
+                };
+            }
+        </style>
+        <iron-ajax
+                auto
+                id="ajaxPost"
+                url="data/operator.json"
+                last-response="{{data}}"
+                handle-as="json"
+                on-response="handleResponse"></iron-ajax>
+        <paper-toolbar>
+            <paper-icon-button icon="menu"></paper-icon-button>
+            <div class="title">Ticket Office</div>
+            <iron-icon icon="face"></iron-icon>
+            <paper-dropdown-menu class="operator" label="Operator" no-label-float>
+                <paper-listbox class="dropdown-content">
+                    <template is="dom-repeat" items="{{users}}">
+                        <paper-item on-click="selectOperator">{{item.name}}</paper-item>
+                    </template>
+                </paper-listbox>
+            </paper-dropdown-menu>
+        </paper-toolbar>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'header-element',
+            ready: function () {
+                this.users = []
+            },
+            handleResponse: function(e, request){
+                this.users = request.xhr.response;
+            },
+            selectOperator: function (e) {
+                var model = e.model;
+                this.fire('iron-signal', {name: "current-operator", data: model.item});
+            }
+        });
+    </script>
+
+</dom-module>
