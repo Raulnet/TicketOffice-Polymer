@@ -1,0 +1,86 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<dom-module id="counter-cart-element">
+    <template>
+        <style>
+            .top-bar-left li {
+                padding: 10px;
+                text-align: center;
+                font-size: 15px;
+            }
+            .top-bar, .top-bar ul {
+                background-color: #008fcd;
+                color: #FFFFFF;
+            }
+        </style>
+        <iron-signals on-iron-signal-up-order="upOrder"></iron-signals>
+        <iron-signals on-iron-signal-remove-order="removeOrder"></iron-signals>
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li>
+                        <iron-icon icon="shopping-cart"></iron-icon>
+                    </li>
+                    <li>{{sumPriceOrder}} €</li>
+                    <li></li>
+                    <li>
+                        <iron-icon icon="theaters"></iron-icon>
+                    </li>
+                    <li>{{sumOrder}}</li>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li>
+                        <paper-button>
+                            <iron-icon on-click="resetCart" icon="delete"></iron-icon>
+                        </paper-button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'counter-cart-element',
+            properties: {
+                sumPriceOrder: {
+                    type: Float32Array,
+                    value: 0.00,
+                },
+                sumOrder: {
+                    type: Int8Array,
+                    value: 0
+                }
+            },
+            ready: function () {
+                this.users = []
+            },
+            listeners: {
+                'upOrder': 'upOrder',
+                'removeOrder': 'removeOrder'
+            },
+            upOrder: function (e, detail) {
+                var order = detail;
+                var sum = parseFloat(this.sumPriceOrder);
+                sum+=parseFloat(order.price);
+                this.sumPriceOrder = sum.toFixed(2);
+                this.sumOrder += 1;
+            },
+            removeOrder: function (e, detail) {
+                var order = detail;
+                var sum = parseFloat(this.sumPriceOrder);
+                sum-=parseFloat(order.price);
+                this.sumPriceOrder = sum.toFixed(2);
+                this.sumOrder -= 1;
+            },
+            resetCart: function(){
+                this.sumPriceOrder = 0.00;
+                this.sumOrder = 0;
+                this.fire('iron-signal', {name: "reset-cart", data: {resetCart: true}});
+            }
+        });
+    </script>
+
+</dom-module>
