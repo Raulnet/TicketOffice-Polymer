@@ -14,56 +14,142 @@
         .orderTicket {
             margin: 5px 0px 5px 0px;
         }
+        .menu{
+            margin-top: 5px;
+            background-color: #008fcd;
+            text-align: center;
+        }
+        .menu a {
+            color: white;
+        }
     </style>
     <template>
-        <paper-header-panel class="blue">
-            <div class="content">
-                <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
-                <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
+        <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
+        <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
+            <ul id="boardCart" hidden="{{hide}}" class="menu expanded">
+                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="DESC" icon="arrow-downward"></iron-icon></a></li>
+                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="ASC" icon="arrow-upward"></iron-icon></a></li>
+                <li><a on-click="filterNotFree" href="#"><iron-icon icon="shopping-cart"></iron-icon></a></li>
+                <li><a on-click="filterFree" href="#"><iron-icon icon="mail"></iron-icon></a></li>
+                <li><a on-click="filterReset" href="#"><iron-icon icon="cached"></iron-icon></a></li>
+            </ul>
+        <template is="dom-repeat" items="{{orders}}" filter="{{computeFilter(searchString)}}" sort="{{sortCart(sort, dataSort)}}">
+            <paper-material class="orderTicket" elevation="1">
+                <paper-item>
+                    <iron-icon icon="{{item.icon}}"></iron-icon>
+                    <paper-item-body two-line>
+                        <div>{{item.title}}</div>
+                        <div secondary>{{item.price}} €</div>
+                    </paper-item-body>
+                    <iron-icon icon="close"></iron-icon>
+                    <paper-item-body>
+                        <div>{{item.ordered}}</div>
+                    </paper-item-body>
+                    <paper-item-body>
+                        <div>{{item.priceTotal}} €</div>
+                    </paper-item-body>
+                    <paper-item-body>
+                        <paper-button>
+                            <iron-icon on-click="add" icon="add"></iron-icon>
+                        </paper-button>
+                        <paper-button>
+                            <iron-icon on-click="remove" icon="remove"></iron-icon>
+                        </paper-button>
+                    </paper-item-body>
+                </paper-item>
+            </paper-material>
+        </template>
 
-                <template is="dom-repeat" items="{{orders}}">
-                    <paper-material class="orderTicket" elevation="1">
-                        <paper-item>
-                            <iron-icon icon="{{item.icon}}"></iron-icon>
-                            <paper-item-body two-line>
-                                <div>{{item.title}}</div>
-                                <div secondary>{{item.price}} €</div>
-                            </paper-item-body>
-                            <iron-icon icon="close"></iron-icon>
-                            <paper-item-body>
-                                <div>{{item.ordered}}</div>
-                            </paper-item-body>
-                            <paper-item-body>
-                                <div>{{item.priceTotal}} €</div>
-                            </paper-item-body>
-                            <paper-item-body>
-                                <paper-button>
-                                    <iron-icon on-click="add" icon="add"></iron-icon>
-                                </paper-button>
-                                <paper-button>
-                                    <iron-icon on-click="remove" icon="remove"></iron-icon>
-                                </paper-button>
-                            </paper-item-body>
-                        </paper-item>
-                    </paper-material>
-                </template>
-            </div>
-        </paper-header-panel>
     </template>
 
     <script>
         Polymer({
             is: 'cart-element',
+            properties: {
+                sort: {
+                    type: String,
+                    value: "DESC"
+                },
+                dataSort: {
+                    type: String,
+                    value: "price"
+                },
+                orders:{
+                    type: Array,
+                    value: []
+                },
+                hide: {
+                    type: Boolean,
+                    value: true
+                }
+            },
             ready: function () {
                 this.sumOrder = '0',
-                        this.orders = []
+                this.searchString = null
             },
             listeners: {
                 'addOrder': 'addOrder',
                 'resetCart': 'resetCart',
             },
-            addOrder: function (e, detail) {
+            sortCart: function(sort, dataSort){
+                return function(a, b){
+                    var dataA = a[dataSort], dataB = b[dataSort];
+                    // resous le problème des Sort sur Float
+                    if (!isNaN(dataA) && dataA.toString().indexOf('.') != -1) {
+                        if(sort == 'ASC'){
+                            return (dataA - dataB);
+                        } else {
+                            return (dataB - dataA);
+                        }
+                    }
+                    if(dataA == dataB) return 0;
+                    if(sort == 'ASC'){
+                        return (dataA > dataB) ? 1 : -1;
+                    } else {
+                        return (dataA < dataB) ? 1 : -1;
+                    }
+                }
+            },
+            setSort: function(e){
+                this.sort = e.target.getAttribute('data-sort');
+                this.dataSort = e.target.getAttribute('data-data_sort');
+            },
+            filterNotFree: function(){
+                this.searchString = 'notFree'
+            },
+            filterFree: function(){
+                this.searchString = 'free'
+            },
+            filterReset: function(){
+                this.searchString = null
+                this.sort = "DESC";
+                this.dataSort = "price";
+            },
+            computeFilter: function(string){
+                switch(string) {
+                    case null:
+                        return null;
+                        break;
+                    case 'notFree':
+                        return function(item){
+                            return item.price > 0;
+                        };
+                        break;
+                    case 'free':
+                        return function(item){
+                            return item.price == 0;
+                        };
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
 
+            },
+            addOrder: function (e, detail) {
+                if(this.orders.length == 0){
+                    this.hide = false;
+                }
                 var order = detail;
                 var indexOf = this.orders.indexOf(order);
 
@@ -81,6 +167,7 @@
                 this.fire('iron-signal', {name: "up-order", data: order});
             },
             add: function (e) {
+
                 var model = e.model;
                 var indexOf = this.orders.indexOf(model.item);
                 var item = this.orders[indexOf];
@@ -101,11 +188,15 @@
                     var indexOf = this.orders.indexOf(model.item);
                     this.splice('orders', indexOf, 1);
                 }
+                if(this.orders.length == 0){
+                    this.hide = true
+                }
                 this.fire('iron-signal', {name: "remove-order", data: model.item});
             },
             resetCart: function(e, detail){
                 if(detail.resetCart == true){
                     this.orders = [];
+                    this.hide = true;
                 }
             }
         });

@@ -28,7 +28,8 @@
     "iron-icon": "PolymerElements/iron-icon#^1.0.7",
     "paper-card": "PolymerElements/paper-card#^1.1.1",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.6",
-    "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.2"
+    "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.2",
+    "font-awesome": "^4.5.0"
   },
   "description": "labs polymer ticket office",
   "main": "",
