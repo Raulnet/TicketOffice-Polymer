@@ -26,16 +26,14 @@
     <template>
         <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
         <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
-        <template is="dom-if" if="{{orders}}">
-            <ul class="menu expanded">
-                <li><a on-click="sort" href="#"><iron-icon icon="arrow-downward"></iron-icon></a></li>
-                <li><a href="#"><iron-icon icon="arrow-upward"></iron-icon></a></li>
+            <ul id="boardCart" hidden="{{hide}}" class="menu expanded">
+                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="DESC" icon="arrow-downward"></iron-icon></a></li>
+                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="ASC" icon="arrow-upward"></iron-icon></a></li>
                 <li><a on-click="filterNotFree" href="#"><iron-icon icon="shopping-cart"></iron-icon></a></li>
                 <li><a on-click="filterFree" href="#"><iron-icon icon="mail"></iron-icon></a></li>
                 <li><a on-click="filterReset" href="#"><iron-icon icon="cached"></iron-icon></a></li>
             </ul>
-        </template>
-        <template is="dom-repeat" items="{{orders}}" filter="{{computeFilter(searchString)}}" sort="sort" >
+        <template is="dom-repeat" items="{{orders}}" filter="{{computeFilter(searchString)}}" sort="{{sortCart(sort, dataSort)}}">
             <paper-material class="orderTicket" elevation="1">
                 <paper-item>
                     <iron-icon icon="{{item.icon}}"></iron-icon>
@@ -67,22 +65,54 @@
     <script>
         Polymer({
             is: 'cart-element',
+            properties: {
+                sort: {
+                    type: String,
+                    value: "DESC"
+                },
+                dataSort: {
+                    type: String,
+                    value: "price"
+                },
+                orders:{
+                    type: Array,
+                    value: []
+                },
+                hide: {
+                    type: Boolean,
+                    value: true
+                }
+            },
             ready: function () {
                 this.sumOrder = '0',
-                        this.orders = [],
-                        this.searchString = null
+                this.searchString = null
             },
             listeners: {
                 'addOrder': 'addOrder',
                 'resetCart': 'resetCart',
             },
-            sort: function(){
-                return this.orders.sort(function(a, b){
-                        var priceTotalA = a.priceTotal, priceTotalB = b.priceTotal;
-                        if(priceTotalA == priceTotalB) return 0;
-                       return (priceTotalA > priceTotalB)?1:-1;
-
-                    });
+            sortCart: function(sort, dataSort){
+                return function(a, b){
+                    var dataA = a[dataSort], dataB = b[dataSort];
+                    // resous le problème des Sort sur Float
+                    if (!isNaN(dataA) && dataA.toString().indexOf('.') != -1) {
+                        if(sort == 'ASC'){
+                            return (dataA - dataB);
+                        } else {
+                            return (dataB - dataA);
+                        }
+                    }
+                    if(dataA == dataB) return 0;
+                    if(sort == 'ASC'){
+                        return (dataA > dataB) ? 1 : -1;
+                    } else {
+                        return (dataA < dataB) ? 1 : -1;
+                    }
+                }
+            },
+            setSort: function(e){
+                this.sort = e.target.getAttribute('data-sort');
+                this.dataSort = e.target.getAttribute('data-data_sort');
             },
             filterNotFree: function(){
                 this.searchString = 'notFree'
@@ -92,6 +122,8 @@
             },
             filterReset: function(){
                 this.searchString = null
+                this.sort = "DESC";
+                this.dataSort = "price";
             },
             computeFilter: function(string){
                 switch(string) {
@@ -115,7 +147,9 @@
 
             },
             addOrder: function (e, detail) {
-
+                if(this.orders.length == 0){
+                    this.hide = false;
+                }
                 var order = detail;
                 var indexOf = this.orders.indexOf(order);
 
@@ -133,6 +167,7 @@
                 this.fire('iron-signal', {name: "up-order", data: order});
             },
             add: function (e) {
+
                 var model = e.model;
                 var indexOf = this.orders.indexOf(model.item);
                 var item = this.orders[indexOf];
@@ -153,11 +188,15 @@
                     var indexOf = this.orders.indexOf(model.item);
                     this.splice('orders', indexOf, 1);
                 }
+                if(this.orders.length == 0){
+                    this.hide = true
+                }
                 this.fire('iron-signal', {name: "remove-order", data: model.item});
             },
             resetCart: function(e, detail){
                 if(detail.resetCart == true){
                     this.orders = [];
+                    this.hide = true;
                 }
             }
         });
