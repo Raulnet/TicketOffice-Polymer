@@ -3,7 +3,7 @@
     "id": 1,
     "icon": "supervisor-account",
     "title": "Public",
-    "price": "10.10",
+    "price": 10,
     "priceTotal": 0,
     "ordered": 0,
     "definition": " Public consecm architecto at corporis culpa cum dolor"
@@ -12,7 +12,7 @@
     "id": 2,
     "icon": "face",
     "title": "Enfant -12ans",
-    "price": "5.00",
+    "price": 5,
     "priceTotal": 0,
     "ordered": 0,
     "definition": "Enfant Lorem ipsum dolor sit amet, consectetur adipisicing elit."
@@ -21,7 +21,7 @@
     "id": 3,
     "icon": "grade",
     "title": "VIP",
-    "price": "25.00",
+    "price": 25,
     "priceTotal": 0,
     "ordered": 0,
     "definition": "VIP amet, consectetur adipisicing elit. Ab accusantium ad adculpa."
@@ -30,7 +30,7 @@
     "id": 4,
     "icon": "mail",
     "title": "Invitation",
-    "price": "0.00",
+    "price": 0,
     "priceTotal": 0,
     "ordered": 0,
     "definition": "Invitation Lorem ipsum dolor sit amet, consectetur adipisicing elit."

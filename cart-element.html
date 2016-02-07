@@ -14,20 +14,28 @@
         .orderTicket {
             margin: 5px 0px 5px 0px;
         }
+        .menu{
+            margin-top: 5px;
+            background-color: #008fcd;
+            text-align: center;
+        }
+        .menu a {
+            color: white;
+        }
     </style>
     <template>
-
-
         <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
         <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
-        <ul class="menu">
-            <li><a href="#">One</a></li>
-            <li><a href="#">Two</a></li>
-            <li><a href="#">Three</a></li>
-            <li><a href="#">Four</a></li>
-        </ul>
-
-        <template is="dom-repeat" items="{{orders}}" filter="isNotFree" >
+        <template is="dom-if" if="{{orders}}">
+            <ul class="menu expanded">
+                <li><a on-click="sort" href="#"><iron-icon icon="arrow-downward"></iron-icon></a></li>
+                <li><a href="#"><iron-icon icon="arrow-upward"></iron-icon></a></li>
+                <li><a on-click="filterNotFree" href="#"><iron-icon icon="shopping-cart"></iron-icon></a></li>
+                <li><a on-click="filterFree" href="#"><iron-icon icon="mail"></iron-icon></a></li>
+                <li><a on-click="filterReset" href="#"><iron-icon icon="cached"></iron-icon></a></li>
+            </ul>
+        </template>
+        <template is="dom-repeat" items="{{orders}}" filter="{{computeFilter(searchString)}}" sort="sort" >
             <paper-material class="orderTicket" elevation="1">
                 <paper-item>
                     <iron-icon icon="{{item.icon}}"></iron-icon>
@@ -61,14 +69,50 @@
             is: 'cart-element',
             ready: function () {
                 this.sumOrder = '0',
-                        this.orders = []
+                        this.orders = [],
+                        this.searchString = null
             },
             listeners: {
                 'addOrder': 'addOrder',
                 'resetCart': 'resetCart',
             },
-            isNotFree: function(item){
-              return item.price > 0;
+            sort: function(){
+                return this.orders.sort(function(a, b){
+                        var priceTotalA = a.priceTotal, priceTotalB = b.priceTotal;
+                        if(priceTotalA == priceTotalB) return 0;
+                       return (priceTotalA > priceTotalB)?1:-1;
+
+                    });
+            },
+            filterNotFree: function(){
+                this.searchString = 'notFree'
+            },
+            filterFree: function(){
+                this.searchString = 'free'
+            },
+            filterReset: function(){
+                this.searchString = null
+            },
+            computeFilter: function(string){
+                switch(string) {
+                    case null:
+                        return null;
+                        break;
+                    case 'notFree':
+                        return function(item){
+                            return item.price > 0;
+                        };
+                        break;
+                    case 'free':
+                        return function(item){
+                            return item.price == 0;
+                        };
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+
             },
             addOrder: function (e, detail) {
 
