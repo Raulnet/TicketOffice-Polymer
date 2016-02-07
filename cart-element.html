@@ -16,39 +16,44 @@
         }
     </style>
     <template>
-        <paper-header-panel class="blue">
-            <div class="content">
-                <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
-                <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
 
-                <template is="dom-repeat" items="{{orders}}">
-                    <paper-material class="orderTicket" elevation="1">
-                        <paper-item>
-                            <iron-icon icon="{{item.icon}}"></iron-icon>
-                            <paper-item-body two-line>
-                                <div>{{item.title}}</div>
-                                <div secondary>{{item.price}} €</div>
-                            </paper-item-body>
-                            <iron-icon icon="close"></iron-icon>
-                            <paper-item-body>
-                                <div>{{item.ordered}}</div>
-                            </paper-item-body>
-                            <paper-item-body>
-                                <div>{{item.priceTotal}} €</div>
-                            </paper-item-body>
-                            <paper-item-body>
-                                <paper-button>
-                                    <iron-icon on-click="add" icon="add"></iron-icon>
-                                </paper-button>
-                                <paper-button>
-                                    <iron-icon on-click="remove" icon="remove"></iron-icon>
-                                </paper-button>
-                            </paper-item-body>
-                        </paper-item>
-                    </paper-material>
-                </template>
-            </div>
-        </paper-header-panel>
+
+        <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
+        <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
+        <ul class="menu">
+            <li><a href="#">One</a></li>
+            <li><a href="#">Two</a></li>
+            <li><a href="#">Three</a></li>
+            <li><a href="#">Four</a></li>
+        </ul>
+
+        <template is="dom-repeat" items="{{orders}}" filter="isNotFree" >
+            <paper-material class="orderTicket" elevation="1">
+                <paper-item>
+                    <iron-icon icon="{{item.icon}}"></iron-icon>
+                    <paper-item-body two-line>
+                        <div>{{item.title}}</div>
+                        <div secondary>{{item.price}} €</div>
+                    </paper-item-body>
+                    <iron-icon icon="close"></iron-icon>
+                    <paper-item-body>
+                        <div>{{item.ordered}}</div>
+                    </paper-item-body>
+                    <paper-item-body>
+                        <div>{{item.priceTotal}} €</div>
+                    </paper-item-body>
+                    <paper-item-body>
+                        <paper-button>
+                            <iron-icon on-click="add" icon="add"></iron-icon>
+                        </paper-button>
+                        <paper-button>
+                            <iron-icon on-click="remove" icon="remove"></iron-icon>
+                        </paper-button>
+                    </paper-item-body>
+                </paper-item>
+            </paper-material>
+        </template>
+
     </template>
 
     <script>
@@ -61,6 +66,9 @@
             listeners: {
                 'addOrder': 'addOrder',
                 'resetCart': 'resetCart',
+            },
+            isNotFree: function(item){
+              return item.price > 0;
             },
             addOrder: function (e, detail) {
 
