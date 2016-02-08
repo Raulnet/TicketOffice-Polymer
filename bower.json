@@ -5,7 +5,6 @@
   ],
   "version": "0.0.1",
   "dependencies": {
-    "foundation-sites": "6.1.2",
     "polymer": "Polymer/polymer#^1.2.0",
     "iron-ajax": "PolymerElements/iron-ajax#~1.1.1",
     "iron-component-page": "PolymerElements/iron-component-page#~1.1.4",
@@ -29,7 +28,8 @@
     "paper-card": "PolymerElements/paper-card#^1.1.1",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.6",
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.2",
-    "font-awesome": "^4.5.0"
+    "font-awesome": "^4.5.0",
+    "bootstrap": "^3.3.6"
   },
   "description": "labs polymer ticket office",
   "main": "",

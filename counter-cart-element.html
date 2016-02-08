@@ -3,42 +3,28 @@
 <dom-module id="counter-cart-element">
     <template>
         <style>
-            .top-bar-left li {
-                padding: 10px;
-                text-align: center;
-                font-size: 15px;
+            .nav {
+                margin-top: 45px;
             }
-            .top-bar, .top-bar ul {
+            .nav .nav-pills, ul {
                 background-color: #008fcd;
                 color: #FFFFFF;
+            }
+            .nav .nav-pills, li {
+                text-align: center;
             }
         </style>
         <iron-signals on-iron-signal-up-order="upOrder"></iron-signals>
         <iron-signals on-iron-signal-remove-order="removeOrder"></iron-signals>
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <ul class="menu">
-                    <li>
-                        <iron-icon icon="shopping-cart"></iron-icon>
-                    </li>
-                    <li>{{sumPriceOrder}} €</li>
-                    <li></li>
-                    <li>
-                        <iron-icon icon="theaters"></iron-icon>
-                    </li>
-                    <li>{{sumOrder}}</li>
-                </ul>
-            </div>
-            <div class="top-bar-right">
-                <ul class="menu">
-                    <li>
-                        <paper-button>
-                            <iron-icon on-click="resetCart" icon="delete"></iron-icon>
-                        </paper-button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <paper-material elevation="1">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation"><iron-icon icon="shopping-cart"></iron-icon> {{sumPriceOrder}} €</li>
+                <li role="presentation"><iron-icon icon="theaters"></iron-icon> {{sumOrder}}</li>
+                <li role="presentation"><paper-button>
+                    <iron-icon on-click="resetCart" icon="delete"></iron-icon>
+                </paper-button></li>
+            </ul>
+        </paper-material>
     </template>
 
     <script>

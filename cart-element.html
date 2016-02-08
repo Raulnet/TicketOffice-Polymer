@@ -7,36 +7,29 @@
 
 <dom-module id="cart-element">
     <style is="custom-style">
-        .content{
-            border: solid 1px #f6f6f6;
-        }
-
         .orderTicket {
             margin: 5px 0px 5px 0px;
         }
-        .menu{
-            margin-top: 5px;
-            background-color: #008fcd;
-            text-align: center;
-        }
-        .menu a {
-            color: white;
+        .icon_ticket{
+            padding-right: 5px;
         }
     </style>
     <template>
         <iron-signals on-iron-signal-add-order="addOrder"></iron-signals>
         <iron-signals on-iron-signal-reset-cart="resetCart"></iron-signals>
-            <ul id="boardCart" hidden="{{hide}}" class="menu expanded">
-                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="DESC" icon="arrow-downward"></iron-icon></a></li>
-                <li><a on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="ASC" icon="arrow-upward"></iron-icon></a></li>
-                <li><a on-click="filterNotFree" href="#"><iron-icon icon="shopping-cart"></iron-icon></a></li>
-                <li><a on-click="filterFree" href="#"><iron-icon icon="mail"></iron-icon></a></li>
-                <li><a on-click="filterReset" href="#"><iron-icon icon="cached"></iron-icon></a></li>
+            <ul id="boardCart" hidden="{{hide}}" class="nav nav-justified">
+                <li><paper-button on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="DESC" icon="arrow-downward"></iron-icon></paper-button></li>
+                <li><paper-button on-click="setSort" href="#"><iron-icon data-data_sort="priceTotal" data-sort="ASC" icon="arrow-upward"></iron-icon></paper-button></li>
+                <li><paper-button on-click="filterNotFree" href="#"><iron-icon icon="shopping-cart"></iron-icon></paper-button></li>
+                <li><paper-button on-click="filterFree" href="#"><iron-icon icon="mail"></iron-icon></paper-button></li>
+                <li><paper-button on-click="filterReset">
+                    <iron-icon icon="cached"></iron-icon>
+                </paper-button></li>
             </ul>
         <template is="dom-repeat" items="{{orders}}" filter="{{computeFilter(searchString)}}" sort="{{sortCart(sort, dataSort)}}">
             <paper-material class="orderTicket" elevation="1">
                 <paper-item>
-                    <iron-icon icon="{{item.icon}}"></iron-icon>
+                    <iron-icon class="icon_ticket" icon="{{item.icon}}"></iron-icon>
                     <paper-item-body two-line>
                         <div>{{item.title}}</div>
                         <div secondary>{{item.price}} €</div>
@@ -49,12 +42,14 @@
                         <div>{{item.priceTotal}} €</div>
                     </paper-item-body>
                     <paper-item-body>
-                        <paper-button>
-                            <iron-icon on-click="add" icon="add"></iron-icon>
-                        </paper-button>
-                        <paper-button>
-                            <iron-icon on-click="remove" icon="remove"></iron-icon>
-                        </paper-button>
+                        <div class="btn-group">
+                            <button class="btn btn-info btn-sm">
+                                <iron-icon on-click="add" icon="add"></iron-icon>
+                            </button>
+                            <button class="btn btn-default btn-sm">
+                                <iron-icon on-click="remove" icon="remove"></iron-icon>
+                            </button>
+                        </div>
                     </paper-item-body>
                 </paper-item>
             </paper-material>
