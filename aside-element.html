@@ -1,0 +1,39 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+
+<dom-module id="aside-element">
+
+    <template>
+        <style is="custom-style">
+            aside{
+                margin-top: 45px;
+            }
+            .list-group-item{
+                text-align: center;
+                height:100px;
+                width: 100px;
+            }
+
+        </style>
+        <aside>
+            <ul class="list-group">
+                <li class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </aside>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'aside-element',
+            ready: function () {
+            },
+
+        });
+    </script>
+
+</dom-module>
