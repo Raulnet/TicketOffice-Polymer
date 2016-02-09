@@ -1,0 +1,68 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-form/iron-form.html">
+<dom-module id="user-form-element">
+
+    <template>
+        <style is="custom-style">
+            :host {
+                margin: 0 auto;
+                z-index: 100;
+                position: absolute;
+            }
+            .well{
+                border-radius: 0;
+                border: 1px solid rgb(204, 204, 204);
+            }
+            .btn{
+                border-radius: 0;
+            }
+            .form-control{
+                border-radius: 0;
+                box-shadow: inset 1px 1px 6px rgba(50,50,50, 0.2);
+            }
+        </style>
+        <iron-signals on-iron-signal-display-user-form="_onFormView"></iron-signals>
+            <paper-material elevation="2">
+                <div hidden="{{hide}}" class="well">
+                    <form is="iron-form" id="formPost" method="post" action="formUserRequest.php" on-iron-form-response="_response">
+                        <div class="form-group">
+                            <label for="form_name">Nom</label>
+                            <input type="text" name="nom" class="form-control" id="form_name" placeholder="nom">
+                        </div>
+                        <div class="form-group">
+                            <label for="form_firstname">Prenom</label>
+                            <input type="text" class="form-control" name="prenom" id="form_firstname" placeholder="prenom">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <div>{{outPut}}</div>
+                </div>
+            </paper-material>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'user-form-element',
+            properties: {
+                hide: {
+                    type: Boolean,
+                    value: true
+                }
+            },
+            ready: function (){},
+            listeners: {
+                'iron-form-submit': 'formSubmit',
+            },
+            formSubmit: function(e) {
+                console.log(e.detail);
+            },
+            _response: function(e, request) {
+                var response = request.xhr.response;
+                this.outPut = response.user;
+            },
+            _onFormView: function() {
+                this.hide = !this.hide;
+            }
+        });
+    </script>
+</dom-module>

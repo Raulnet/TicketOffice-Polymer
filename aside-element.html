@@ -1,0 +1,52 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+
+<dom-module id="aside-element">
+
+    <template>
+        <style is="custom-style">
+            aside{
+                margin-top: 45px;
+            }
+            .list-group-item{
+                text-align: center;
+                height:100px;
+                width: 100px;
+                padding: 0px;!important;
+                box-sizing: border-box;
+
+            }
+            .list-group-item .btn{
+                border-radius: 0px;
+                text-align: center;
+                height:100px;
+                width: 100px;
+                padding: 0px;!important;
+                box-sizing: border-box;
+            }
+
+        </style>
+        <aside>
+            <div class="list-group">
+                <a on-click="displayForm" class="list-group-item"><iron-icon icon="account-circle"></iron-icon></span></a>
+                <a class="list-group-item"></a>
+                <a class="list-group-item"></a>
+                <a class="list-group-item"></a>
+            </div>
+        </aside>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'aside-element',
+            ready: function () {
+            },
+            displayForm: function(e){
+                this.fire('iron-signal', {name: "display-user-form", data: true});
+            }
+
+        });
+    </script>
+
+</dom-module>

@@ -1,13 +1,19 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-card/paper-card.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
 <dom-module id="list_ticket-element">
     <template>
         <style is="custom-style">
-            paper-card.rate {
-                @apply(--layout-flex);
-                margin: 5px -10PX 5PX -10PX;
-                width: 100%;
+            .col-xs-4{
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            .panel{
+                border-radius: 0;
+            }
+            .panel-footer{
+                padding: 0px;
             }
         </style>
         <iron-ajax
@@ -19,29 +25,24 @@
         <iron-signals on-iron-signal-current-operator="currentOperator"></iron-signals>
         <div class="row">
             <template is="dom-repeat" items="{{prices}}">
-                <div class="small-12 medium-6 large-4 columns">
-                    <paper-card class="rate">
-                        <div class="top-bar">
-                            <div class="top-bar-left">
-                                <div class="rate-header">
-                                    <iron-icon icon="{{item.icon}}"></iron-icon>
-                                    {{item.title}}
-                                </div>
+                <div class="col-xs-4">
+                    <paper-material elevation="1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"> <iron-icon icon="{{item.icon}}"></iron-icon> {{item.title}}</h3>
                             </div>
-                        </div>
-                        <div class="rate-content">
-                            <div class="card-content">
+                            <div class="panel-body">
                                 <div class="rate-name">{{item.price}} €</div>
                                 <div>{{item.definition}}</div>
                             </div>
-                            <div class="card-actions">
+                            <div class="panel-footer">
                                 <paper-button on-click="more">
                                     <iron-icon icon="add-shopping-cart"></iron-icon>
                                     Ajouter
                                 </paper-button>
                             </div>
                         </div>
-                    </paper-card>
+                    </paper-material>
                 </div>
             </template>
         </div>
