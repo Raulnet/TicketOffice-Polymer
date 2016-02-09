@@ -13,17 +13,27 @@
                 text-align: center;
                 height:100px;
                 width: 100px;
+                padding: 0px;!important;
+                box-sizing: border-box;
+
+            }
+            .list-group-item .btn{
+                border-radius: 0px;
+                text-align: center;
+                height:100px;
+                width: 100px;
+                padding: 0px;!important;
+                box-sizing: border-box;
             }
 
         </style>
         <aside>
-            <ul class="list-group">
-                <li class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+            <div class="list-group">
+                <a on-click="displayForm" class="list-group-item"><iron-icon icon="account-circle"></iron-icon></span></a>
+                <a class="list-group-item"></a>
+                <a class="list-group-item"></a>
+                <a class="list-group-item"></a>
+            </div>
         </aside>
     </template>
 
@@ -32,6 +42,9 @@
             is: 'aside-element',
             ready: function () {
             },
+            displayForm: function(e){
+                this.fire('iron-signal', {name: "display-user-form", data: true});
+            }
 
         });
     </script>

@@ -29,7 +29,8 @@
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.6",
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.2",
     "font-awesome": "^4.5.0",
-    "bootstrap": "^3.3.6"
+    "bootstrap": "^3.3.6",
+    "iron-form": "PolymerElements/iron-form#^1.0.14"
   },
   "description": "labs polymer ticket office",
   "main": "",
